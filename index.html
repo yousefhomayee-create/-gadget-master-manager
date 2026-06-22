@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gadget Master Manager v5</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section id="loginScreen" class="login-screen">
+    <form id="loginForm" class="login-card">
+      <h1>Gadget Master Manager</h1>
+      <p>Cloud staff login</p>
+      <div id="keyBox" class="key-box">
+        <strong>First-time setup</strong>
+        <p>Paste your Supabase publishable key once. It starts with <code>sb_publishable_</code>.</p>
+        <input id="apiKeyInput" placeholder="Paste publishable key here" />
+        <button id="saveKeyBtn" type="button">Save Key</button>
+      </div>
+      <input name="email" type="email" placeholder="Owner/staff email" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <button>Login</button>
+      <p id="loginMessage" class="message"></p>
+    </form>
+  </section>
+
+  <section id="appScreen" class="app-screen hidden">
+    <header class="topbar">
+      <div>
+        <h1>Gadget Master Manager</h1>
+        <p id="userInfo">Repair tickets, invoices, stock and staff</p>
+      </div>
+      <div class="top-actions">
+        <span id="roleBadge" class="badge">Role</span>
+        <button id="syncBtn">Sync</button>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="repairs" data-roles="owner,manager,staff,technician">Repairs</button>
+      <button class="tab" data-tab="sales" data-roles="owner,manager,staff">Sales / Invoices</button>
+      <button class="tab" data-tab="inventory" data-roles="owner,manager,staff">Inventory</button>
+      <button class="tab" data-tab="customers" data-roles="owner,manager,staff">Customers</button>
+      <button class="tab" data-tab="reports" data-roles="owner,manager">Reports</button>
+      <button class="tab" data-tab="staff" data-roles="owner">Staff</button>
+    </nav>
+
+    <main>
+      <section id="dashboard" class="panel active">
+        <div class="cards">
+          <div class="card"><span>Total Stock</span><strong id="totalStock">0</strong></div>
+          <div class="card"><span>Active Repairs</span><strong id="activeRepairs">0</strong></div>
+          <div class="card"><span>Ready Repairs</span><strong id="readyRepairs">0</strong></div>
+          <div class="card restricted-report"><span>Total Sales</span><strong id="totalSales">€0.00</strong></div>
+          <div class="card restricted-report"><span>Total Profit</span><strong id="totalProfit">€0.00</strong></div>
+        </div>
+      </section>
+
+      <section id="repairs" class="panel">
+        <div class="section-head">
+          <h2>Repair Tickets</h2>
+          <button onclick="openModal('repairModal')">+ New Repair Ticket</button>
+        </div>
+        <input id="repairSearch" class="search" placeholder="Search ticket, customer, phone, device, IMEI..." />
+        <div class="table-wrap"><table id="repairTable"></table></div>
+      </section>
+
+      <section id="sales" class="panel">
+        <div class="section-head">
+          <h2>Sales / Invoices</h2>
+          <button onclick="openModal('saleModal')">+ New Invoice</button>
+        </div>
+        <div class="table-wrap"><table id="saleTable"></table></div>
+      </section>
+
+      <section id="inventory" class="panel">
+        <div class="section-head"><h2>Inventory</h2><button onclick="openModal('inventoryModal')">+ Add Stock</button></div>
+        <input id="inventorySearch" class="search" placeholder="Search inventory, IMEI, serial..." />
+        <div class="table-wrap"><table id="inventoryTable"></table></div>
+      </section>
+
+      <section id="customers" class="panel">
+        <div class="section-head"><h2>Customers</h2><button onclick="openModal('customerModal')">+ Add Customer</button></div>
+        <input id="customerSearch" class="search" placeholder="Search customers..." />
+        <div class="table-wrap"><table id="customerTable"></table></div>
+      </section>
+
+      <section id="reports" class="panel">
+        <h2>Reports</h2>
+        <div class="cards">
+          <div class="card"><span>Cash Sales</span><strong id="cashSales">€0.00</strong></div>
+          <div class="card"><span>Card Sales</span><strong id="cardSales">€0.00</strong></div>
+          <div class="card"><span>Repair Income</span><strong id="repairIncome">€0.00</strong></div>
+          <div class="card"><span>Inventory Value</span><strong id="inventoryValue">€0.00</strong></div>
+        </div>
+      </section>
+
+      <section id="staff" class="panel">
+        <h2>Staff Members</h2>
+        <div class="table-wrap"><table id="staffTable"></table></div>
+      </section>
+    </main>
+  </section>
+
+  <div id="repairModal" class="modal">
+    <form id="repairForm" class="modal-card">
+      <h2>New Repair Ticket</h2>
+      <input name="customer_name" placeholder="Customer name" required />
+      <input name="customer_phone" placeholder="Customer phone" required />
+      <input name="device" placeholder="Device e.g. iPhone 13, HP Laptop" required />
+      <input name="imei_serial" placeholder="IMEI / Serial number" />
+      <input name="problem" placeholder="Problem e.g. screen, charging port, water damage" required />
+      <input name="repair_cost" type="number" step="0.01" placeholder="Repair cost €" />
+      <input name="deposit" type="number" step="0.01" placeholder="Deposit paid €" />
+      <select name="status">
+        <option>Received</option><option>Diagnosing</option><option>Waiting Parts</option>
+        <option>In Repair</option><option>Ready</option><option>Collected</option><option>Cancelled</option>
+      </select>
+      <textarea name="notes" placeholder="Technician notes"></textarea>
+      <div class="modal-actions"><button type="button" class="secondary" onclick="closeModal('repairModal')">Cancel</button><button>Save Ticket</button></div>
+    </form>
+  </div>
+
+  <div id="saleModal" class="modal">
+    <form id="saleForm" class="modal-card">
+      <h2>New Invoice / Sale</h2>
+      <input name="item_name" placeholder="Item sold / service" required />
+      <input name="customer_name" placeholder="Customer name" />
+      <input name="customer_phone" placeholder="Customer phone" />
+      <input name="sale_amount" type="number" step="0.01" placeholder="Sale amount €" required />
+      <input name="item_cost" type="number" step="0.01" placeholder="Item cost €" />
+      <select name="payment_method"><option>Cash</option><option>Card</option><option>Revolut</option><option>Bank Transfer</option></select>
+      <textarea name="notes" placeholder="Invoice notes / warranty notes"></textarea>
+      <div class="modal-actions"><button type="button" class="secondary" onclick="closeModal('saleModal')">Cancel</button><button>Save Invoice</button></div>
+    </form>
+  </div>
+
+  <div id="inventoryModal" class="modal">
+    <form id="inventoryForm" class="modal-card">
+      <h2>Add Inventory</h2>
+      <input name="category" placeholder="Category" required />
+      <input name="brand" placeholder="Brand" required />
+      <input name="model" placeholder="Model" required />
+      <input name="variant" placeholder="Storage / Colour / RAM" />
+      <input name="serial" placeholder="IMEI / Serial" />
+      <input name="buy_price" type="number" step="0.01" placeholder="Buy price €" />
+      <input name="sell_price" type="number" step="0.01" placeholder="Sell price €" />
+      <input name="quantity" type="number" placeholder="Quantity" required />
+      <div class="modal-actions"><button type="button" class="secondary" onclick="closeModal('inventoryModal')">Cancel</button><button>Save</button></div>
+    </form>
+  </div>
+
+  <div id="customerModal" class="modal">
+    <form id="customerForm" class="modal-card">
+      <h2>Add Customer</h2>
+      <input name="name" placeholder="Customer name" required />
+      <input name="phone" placeholder="Phone" required />
+      <input name="email" type="email" placeholder="Email" />
+      <textarea name="notes" placeholder="Notes"></textarea>
+      <div class="modal-actions"><button type="button" class="secondary" onclick="closeModal('customerModal')">Cancel</button><button>Save</button></div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
