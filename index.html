@@ -2,26 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gadget Master Manager v5</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Gadget Master Manager</title>
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Gadget Master" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <section id="loginScreen" class="login-screen">
     <form id="loginForm" class="login-card">
+      <div class="brand-mark">GM</div>
       <h1>Gadget Master Manager</h1>
-      <p>Cloud staff login</p>
+      <p>Mobile cloud staff login</p>
       <div id="keyBox" class="key-box">
         <strong>First-time setup</strong>
         <p>Paste your Supabase publishable key once. It starts with <code>sb_publishable_</code>.</p>
-        <input id="apiKeyInput" placeholder="Paste publishable key here" />
+        <input id="apiKeyInput" placeholder="Paste publishable key here" autocomplete="off" />
         <button id="saveKeyBtn" type="button">Save Key</button>
       </div>
-      <input name="email" type="email" placeholder="Owner/staff email" required />
-      <input name="password" type="password" placeholder="Password" required />
+      <input name="email" type="email" placeholder="Owner/staff email" autocomplete="email" required />
+      <input name="password" type="password" placeholder="Password" autocomplete="current-password" required />
       <button>Login</button>
       <p id="loginMessage" class="message"></p>
+      <details class="install-help">
+        <summary>Install on iPhone / Android</summary>
+        <p><strong>iPhone:</strong> Safari → Share button → Add to Home Screen.</p>
+        <p><strong>Android:</strong> Chrome → menu ⋮ → Add to Home screen / Install app.</p>
+      </details>
     </form>
   </section>
 
@@ -57,22 +70,20 @@
           <div class="card restricted-report"><span>Total Sales</span><strong id="totalSales">€0.00</strong></div>
           <div class="card restricted-report"><span>Total Profit</span><strong id="totalProfit">€0.00</strong></div>
         </div>
+        <div class="box app-install-box">
+          <h2>Install as App</h2>
+          <p>Use Safari or Chrome “Add to Home Screen” to install Gadget Master Manager like a mobile app.</p>
+        </div>
       </section>
 
       <section id="repairs" class="panel">
-        <div class="section-head">
-          <h2>Repair Tickets</h2>
-          <button onclick="openModal('repairModal')">+ New Repair Ticket</button>
-        </div>
+        <div class="section-head"><h2>Repair Tickets</h2><button onclick="openModal('repairModal')">+ New Repair Ticket</button></div>
         <input id="repairSearch" class="search" placeholder="Search ticket, customer, phone, device, IMEI..." />
         <div class="table-wrap"><table id="repairTable"></table></div>
       </section>
 
       <section id="sales" class="panel">
-        <div class="section-head">
-          <h2>Sales / Invoices</h2>
-          <button onclick="openModal('saleModal')">+ New Invoice</button>
-        </div>
+        <div class="section-head"><h2>Sales / Invoices</h2><button onclick="openModal('saleModal')">+ New Invoice</button></div>
         <div class="table-wrap"><table id="saleTable"></table></div>
       </section>
 
