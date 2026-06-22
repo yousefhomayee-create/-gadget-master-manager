@@ -137,7 +137,9 @@
 
   <div id="saleModal" class="modal">
     <form id="saleForm" class="modal-card">
-      <h2>New Invoice / Sale</h2>
+      <h2 id="saleModalTitle">New Invoice / Sale</h2>
+      <input type="hidden" name="sale_id" />
+      <input name="invoice_no" placeholder="Invoice number (auto if empty)" />
       <input name="item_name" placeholder="Item sold / service" required />
       <input name="customer_name" placeholder="Customer name" />
       <input name="customer_phone" placeholder="Customer phone" />
@@ -149,7 +151,7 @@
       <input name="item_cost" type="number" step="0.01" placeholder="Item cost €" />
       <select name="payment_method"><option>Cash</option><option>Card</option><option>Revolut</option><option>Bank Transfer</option></select>
       <textarea name="notes" placeholder="Invoice notes / warranty notes"></textarea>
-      <div class="modal-actions"><button type="button" class="secondary" onclick="closeModal('saleModal')">Cancel</button><button>Save Invoice</button></div>
+      <div class="modal-actions"><button type="button" class="secondary" onclick="resetSaleForm(); closeModal('saleModal')">Cancel</button><button id="saleSaveBtn">Save Invoice</button></div>
     </form>
   </div>
 

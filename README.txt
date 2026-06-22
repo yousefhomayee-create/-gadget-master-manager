@@ -1,22 +1,16 @@
-Gadget Master Manager v7.1 Receipt Print Fix
+Gadget Master Manager v7.2 Edit Invoices
 
-This version fixes the blank invoice/receipt print preview.
+New feature:
+- Edit existing invoices
+- Update customer name, phone, item, IMEI/serial, quantity, price, VAT, warranty and notes
+- Re-print corrected receipt
 
-What changed:
-- Receipt now opens in its own clean printable page.
-- Old print CSS that caused blank pages was removed.
-- No new Supabase SQL needed if v7_receipt_upgrade.sql was already run.
+How to use:
+1. Open Sales / Invoices
+2. Tap Edit beside the invoice
+3. Change the details
+4. Tap Update Invoice
+5. Tap Print
 
-How to update:
-1. Upload and replace these files in GitHub:
-   - app.js
-   - style.css
-   - index.html if needed
-2. Commit changes.
-3. Wait 1-2 minutes for GitHub Pages.
-4. Close/reopen the app.
-5. Create a new invoice.
-6. Press Print.
-
-If iPhone blocks the print page:
-- Allow popups for the site, then try Print again.
+Upload these extracted files to GitHub and replace old files.
+If editing gives a permission error, run v7_2_edit_invoices.sql in Supabase.
