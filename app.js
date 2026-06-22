@@ -72,4 +72,45 @@ const SUPABASE_URL="https://muzyvknpztbbdthpfbya.supabase.co";let SUPABASE_KEY=l
 </div>
 
 <div class="thanks">Thank you for your business</div>
-</div>`)}function printHtml(html){const div=document.createElement("div");div.innerHTML=html;document.body.appendChild(div);window.print();setTimeout(()=>div.remove(),500)}window.printRepair=printRepair;window.printInvoice=printInvoice;if("serviceWorker"in navigator){navigator.serviceWorker.register("service-worker.js").catch(console.warn)}
+</div>`)}function printHtml(html){
+  const w = window.open("", "_blank");
+  if(!w){
+    alert("Popup blocked. Please allow popups for this app, then try Print again.");
+    return;
+  }
+  w.document.open();
+  w.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gadget Master Receipt</title>
+<style>
+  body{margin:0;background:white;color:#111;font-family:Arial,sans-serif}
+  .print-page{padding:20px;max-width:820px;margin:0 auto}
+  .receipt{font-family:Arial,sans-serif;color:#111;padding:18px;max-width:780px;margin:0 auto}
+  .receipt .head{text-align:center;border-bottom:2px solid #111;padding-bottom:12px;margin-bottom:14px}
+  .receipt .logo{width:64px;height:64px;border-radius:16px;background:#111827;color:white;display:inline-grid;place-items:center;font-weight:900;font-size:24px;margin-bottom:8px}
+  .receipt h1{margin:4px 0;font-size:26px}
+  .receipt .shop{font-size:13px;color:#444;line-height:1.4}
+  .receipt .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+  .receipt .box{border:1px solid #ccc;border-radius:8px;padding:10px}
+  .receipt table{width:100%;border-collapse:collapse;margin-top:12px}
+  .receipt th,.receipt td{border:1px solid #ccc;padding:9px;text-align:left}
+  .receipt th{background:#f3f4f6}
+  .receipt .totals{margin-left:auto;width:280px;margin-top:12px}
+  .receipt .totals td:last-child{text-align:right;font-weight:bold}
+  .receipt .terms{font-size:12px;color:#444;margin-top:18px;border-top:1px solid #ccc;padding-top:12px;line-height:1.5}
+  .receipt .signatures{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:42px}
+  .receipt .sig{border-top:1px solid #111;padding-top:8px;font-size:12px;text-align:center}
+  .receipt .thanks{text-align:center;margin-top:20px;font-weight:bold}
+  @media print{
+    body{background:white}
+    .print-page{padding:0}
+  }
+</style>
+</head>
+<body>${html}</body>
+</html>`);
+  w.document.close();
+  setTimeout(()=>{ w.focus(); w.print(); }, 500);
+}window.printRepair=printRepair;window.printInvoice=printInvoice;if("serviceWorker"in navigator){navigator.serviceWorker.register("service-worker.js").catch(console.warn)}

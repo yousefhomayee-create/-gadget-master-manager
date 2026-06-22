@@ -1,27 +1,22 @@
-Gadget Master Manager v7 Receipts
+Gadget Master Manager v7.1 Receipt Print Fix
 
-New receipt/invoice print fields:
-- Gadget Master logo
-- Shop name
-- Address placeholder
-- Phone/email placeholder
-- Invoice number
-- Date
-- Customer name
-- Customer phone
-- Item sold/service
-- IMEI/Serial
-- Quantity
-- Price
-- Total
-- VAT
-- Warranty text
-- Notes
-- Customer signature line
-- Staff signature line
+This version fixes the blank invoice/receipt print preview.
 
-Before testing:
-1. Upload extracted files to GitHub and replace old files.
-2. Run v7_receipt_upgrade.sql in Supabase.
-3. Wait for GitHub Pages to redeploy.
-4. Close/reopen the installed app or refresh Safari.
+What changed:
+- Receipt now opens in its own clean printable page.
+- Old print CSS that caused blank pages was removed.
+- No new Supabase SQL needed if v7_receipt_upgrade.sql was already run.
+
+How to update:
+1. Upload and replace these files in GitHub:
+   - app.js
+   - style.css
+   - index.html if needed
+2. Commit changes.
+3. Wait 1-2 minutes for GitHub Pages.
+4. Close/reopen the app.
+5. Create a new invoice.
+6. Press Print.
+
+If iPhone blocks the print page:
+- Allow popups for the site, then try Print again.
